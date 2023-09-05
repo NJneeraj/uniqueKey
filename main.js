@@ -7,22 +7,19 @@ const port = 3000;
 
 app.use(bodyParser.json());
 
-// Define a POST route to add a new institute
-app.post("/addInstitute", async (req, res) => {
+// Register a new user (institute)
+app.post("/register", async (req, res) => {
   try {
-    const { username, mtc_code, instituteName, address, centerName } = req.body;
+    const { username, instituteName, address, centerName } = req.body;
 
-    // Check if the institute already exists based on the provided mtc_code
-    const existingInstitute = await User.findOne({ where: { mtc_code } });
+    // Generate a unique MTC code
+    let mtc_code;
+    do {
+      mtc_code = User.generateMTCCode();
+    } while (await User.findOne({ where: { mtc_code } }));
 
-    if (existingInstitute) {
-      return res
-        .status(400)
-        .json({ error: "Institute with this MTC code already exists" });
-    }
-
-    // Create a new institute
-    const newInstitute = await User.create({
+    // Create a new user (institute) with the generated MTC code
+    const newUser = await User.create({
       username,
       mtc_code,
       instituteName,
@@ -30,11 +27,11 @@ app.post("/addInstitute", async (req, res) => {
       centerName,
     });
 
-    return res.status(201).json(newInstitute);
+    return res.status(201).json(newUser);
   } catch (error) {
     return res
       .status(500)
-      .json({ error: "An error occurred while adding the institute" });
+      .json({ error: "An error occurred while registering the user" });
   }
 });
 
