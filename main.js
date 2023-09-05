@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.post("/register", async (req, res) => {
   try {
     const { username, instituteName, address, centerName } = req.body;
-
+    console.log("haha");
     // Generate a unique MTC code
     let mtc_code;
     do {
@@ -29,6 +29,7 @@ app.post("/register", async (req, res) => {
 
     return res.status(201).json(newUser);
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ error: "An error occurred while registering the user" });
