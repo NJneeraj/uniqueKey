@@ -1,24 +1,30 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const User = require("./models/user"); // Import the User model
+const User = require("./models/user");
+const cors = require("cors"); // Import the cors middleware
 
 const app = express();
-const port = 3000;
+const port = 5000;
 
 app.use(bodyParser.json());
 
-// Register a new user (institute)
+// Add CORS middleware
+app.use(cors());
+
+app.get("/", (req, res) => {
+  res.send("Yeah");
+});
+
 app.post("/register", async (req, res) => {
   try {
+    console.log(req.body);
     const { username, instituteName, address, centerName } = req.body;
-    console.log("haha");
-    // Generate a unique MTC code
+    console.log(username, instituteName, address, centerName);
     let mtc_code;
-    do {
-      mtc_code = User.generateMTCCode();
-    } while (await User.findOne({ where: { mtc_code } }));
+    // do {
+    mtc_code = User.generateMTCCode();
+    // } while (await User.findOne({ where: { mtc_code } }));
 
-    // Create a new user (institute) with the generated MTC code
     const newUser = await User.create({
       username,
       mtc_code,

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <h2>Register Your Institute</h2>
+    <div class="form">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required /><br /><br />
+
+      <label for="institute">Institute Name:</label>
+      <input type="text" id="institute" name="institute" required /><br /><br />
+
+      <label for="address">Address:</label>
+      <textarea id="address" name="address" required></textarea><br /><br />
+
+      <label for="center">Center Name:</label>
+      <input type="text" id="center" name="center" required /><br /><br />
+
+      <button onclick="register()">Submit</button>
+    </div>
+  </body>
+  <script>
+    async function register() {
+  const formData = {
+    username: document.getElementById('username').value,
+    instituteName: document.getElementById('institute').value,
+    address: document.getElementById('address').value,
+    centerName: document.getElementById('center').value,
+  };
+
+  try {
+    const response = await fetch('http://127.0.0.1:5000/register', { // Request to the proxy server
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      console.error('Error:', response.statusText);
+      return;
+    }
+
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+  </script>
+</html>
