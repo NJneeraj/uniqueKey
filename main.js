@@ -42,6 +42,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.listen(port, async () => {
+app.listen(port, "0.0.0.0", async () => {
   console.log(`Server is running on port ${port}`);
 });
